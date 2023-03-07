@@ -15,7 +15,6 @@ CRUD.read = async function (req, res, filePath, cb) {
       res.status(501).send(commonErrorResponse);
       return;
     }
-    console.log("crud", foundData);
     cb(foundData);
   });
 };
