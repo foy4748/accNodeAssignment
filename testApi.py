@@ -13,16 +13,15 @@ headers = { "Content-Type": "application/json"}
 # res = rq.get(baseURL + "/random")
 # print(res.text)
 
+
 # Testing /user/save route
 
+data = {
+        "name":"Test Data"
+        }
 
-# data = {
-#         "id":"06",
-#         "name":"Test Data"
-#         }
-
-# res = rq.post(baseURL + "/save", headers=headers, json=data)
-# print(res.text)
+res = rq.post(baseURL + "/save", headers=headers, json=data)
+print(res.text)
 
 # Testing /user/update route
 # updateData = {
@@ -35,9 +34,9 @@ headers = { "Content-Type": "application/json"}
 
     
 # Testing /user/delete route
-deleteData = {
-        "id":"03",
-        }
+# deleteData = {
+#         "id":"03",
+#         }
 
-res = rq.delete(baseURL + "/delete", headers=headers, json=deleteData)
-print(res.text)
+# res = rq.delete(baseURL + "/delete", headers=headers, json=deleteData)
+# print(res.text)

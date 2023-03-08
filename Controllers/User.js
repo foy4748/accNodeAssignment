@@ -1,5 +1,6 @@
 const express = require("express");
 const CRUD = require("../Lib/CRUD");
+const NewUserValidator = require("../Validators/NewUserValidator");
 
 const router = express.Router();
 const dataPath = `${global.projectRoot}/data.json`;
@@ -20,9 +21,11 @@ router.get("/all", (req, res) => {
 });
 
 // POST - SAVE A USER
-router.post("/save", (req, res) => {
+router.post("/save", NewUserValidator, (req, res) => {
   CRUD.read(req, res, dataPath, (readData) => {
-    const newData = [...readData, req.body];
+    const newEntry = req.body;
+    newEntry["id"] = readData.length + 1;
+    const newData = [...readData, newEntry];
     CRUD.write(req, res, dataPath, newData, (isWritten) => {
       if (isWritten) {
         res.send({ error: false, message: " Successfully saved new User" });
