@@ -1,6 +1,7 @@
 const express = require("express");
 const CRUD = require("../Lib/CRUD");
-const NewUserValidator = require("../Validators/NewUserValidator");
+const { NewUserValidator } = require("../Validators/NewUserValidator");
+const UserIdValidator = require("../Validators/UsesrIdValidator");
 
 const router = express.Router();
 const dataPath = `${global.projectRoot}/data.json`;
@@ -16,6 +17,10 @@ router.get("/random", (req, res) => {
 // GET - ALL USERS
 router.get("/all", (req, res) => {
   CRUD.read(req, res, dataPath, (readData) => {
+    const { limit } = req.query;
+    if (limit) {
+      return res.send(readData.slice(0, parseInt(limit)));
+    }
     return res.send(readData);
   });
 });
@@ -35,7 +40,7 @@ router.post("/save", NewUserValidator, (req, res) => {
 });
 
 // PATCH - UPDATE A SINGLE USER
-router.patch("/update", (req, res) => {
+router.patch("/update", UserIdValidator, (req, res) => {
   console.log(req.body);
   CRUD.read(req, res, dataPath, (readData) => {
     for (let item of readData) {
@@ -54,9 +59,11 @@ router.patch("/update", (req, res) => {
 });
 
 // DELETE - A SINGLE USER
-router.delete("/delete", (req, res) => {
+router.delete("/delete", UserIdValidator, (req, res) => {
   CRUD.read(req, res, dataPath, (readData) => {
-    const newData = readData.filter((item) => item.id != req.body.id);
+    const newData = readData.filter(
+      (item) => parseInt(item.id) != parseInt(req.body.id)
+    );
 
     CRUD.write(req, res, dataPath, newData, (isWritten) => {
       if (isWritten)

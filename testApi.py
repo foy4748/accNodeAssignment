@@ -5,8 +5,9 @@ headers = { "Content-Type": "application/json"}
 
 # Testing /user/all route
 
+# res = rq.get(baseURL + "/all?limit=3")
 # res = rq.get(baseURL + "/all")
-# # print(res.text)
+# print(res.text)
 
 
 # Testing /user/random route
@@ -16,16 +17,24 @@ headers = { "Content-Type": "application/json"}
 
 # Testing /user/save route
 
-data = {
-        "name":"Test Data"
-        }
+# data = {
+#         "name":"Test Data"
+#         }
 
-res = rq.post(baseURL + "/save", headers=headers, json=data)
-print(res.text)
+# data = {
+#         "name":"Test Data",
+#         "gender":"male",
+#         "contact":"018292",
+#         "address":"Dhaka, Bangladesh",
+#         "photoUrl":"https://randomuser.me/api/portraits/thumb/women/79.jpg"
+#         }
+
+# res = rq.post(baseURL + "/save", headers=headers, json=data)
+# print(res.text)
 
 # Testing /user/update route
 # updateData = {
-#         "id":"05",
+#         "id":"2",
 #         "name":"Faisal"
 #         }
 
@@ -34,9 +43,9 @@ print(res.text)
 
     
 # Testing /user/delete route
-# deleteData = {
-#         "id":"03",
-#         }
+deleteData = {
+        "id":"0xxx",
+        }
 
-# res = rq.delete(baseURL + "/delete", headers=headers, json=deleteData)
-# print(res.text)
+res = rq.delete(baseURL + "/delete", headers=headers, json=deleteData)
+print(res.text)

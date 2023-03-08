@@ -1,15 +1,18 @@
-const NewUserValidator = (req, res, next) => {
-  const newEntry = req.body;
+function detectMissingFields(entry) {
   const requiredFields = ["name", "gender", "contact", "address", "photoUrl"];
-  const availableFields = Object.keys(newEntry);
-  const missingFields = [];
+  const availableFields = Object.keys(entry);
+  const missingFieldsArray = [];
 
   for (const prop of requiredFields) {
     if (!availableFields.includes(prop)) {
-      missingFields.push(prop);
+      missingFieldsArray.push(prop);
     }
   }
-  console.log(missingFields);
+  return missingFieldsArray;
+}
+const NewUserValidator = (req, res, next) => {
+  const newEntry = req.body;
+  const missingFields = detectMissingFields(newEntry);
 
   if (missingFields.length > 0) {
     return res.send({
@@ -20,4 +23,4 @@ const NewUserValidator = (req, res, next) => {
     next();
   }
 };
-module.exports = NewUserValidator;
+module.exports = { NewUserValidator, detectMissingFields };
