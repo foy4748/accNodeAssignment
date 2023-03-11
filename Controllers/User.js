@@ -1,11 +1,13 @@
 const express = require("express");
+const path = require("path");
 const CRUD = require("../Lib/CRUD");
 const { NewUserValidator } = require("../Validators/NewUserValidator");
 const UserIdValidator = require("../Validators/UsesrIdValidator");
 const BulkEntryValidator = require("../Validators/BulkEntryValidator");
 
 const router = express.Router();
-const dataPath = `${global.projectRoot}/data.json`;
+const dataPath = path.join(process.cwd(), "/data.json");
+console.log(dataPath);
 
 // GET - A RANDOM USER
 router.get("/random", (req, res) => {
