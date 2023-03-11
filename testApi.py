@@ -41,11 +41,27 @@ headers = { "Content-Type": "application/json"}
 # res = rq.patch(baseURL + "/update", headers=headers, json=updateData)
 # print(res.text)
 
+# Testing /user/bulk-update route
+updateData = [
+        {
+            "id":"2",
+            "name":"Faisal"
+            },
+        {
+            "id":"3",
+            "contact":"123456789"
+            }
+
+        ] 
+
+res = rq.patch(baseURL + "/bulk-update", headers=headers, json=updateData)
+print(res.text)
+
     
 # Testing /user/delete route
-deleteData = {
-        "id":"0xxx",
-        }
+# deleteData = {
+#         "id":"0xxx",
+#         }
 
-res = rq.delete(baseURL + "/delete", headers=headers, json=deleteData)
-print(res.text)
+# res = rq.delete(baseURL + "/delete", headers=headers, json=deleteData)
+# print(res.text)

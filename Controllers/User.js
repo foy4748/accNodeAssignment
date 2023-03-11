@@ -44,7 +44,7 @@ router.patch("/update", UserIdValidator, (req, res) => {
   console.log(req.body);
   CRUD.read(req, res, dataPath, (readData) => {
     for (let item of readData) {
-      if (item.id == req.body.id) {
+      if (parseInt(item.id) == parseInt(req.body.id)) {
         for (const prop in req.body) {
           item[prop] = req.body[prop];
         }
@@ -54,6 +54,18 @@ router.patch("/update", UserIdValidator, (req, res) => {
     CRUD.write(req, res, dataPath, readData, (isWritten) => {
       if (isWritten)
         res.send({ error: false, message: "Updated Successfully" });
+    });
+  });
+});
+
+// PATCH - MULTIPLE USERS
+router.patch("/bulk-update", (req, res) => {
+  CRUD.read(req, res, dataPath, (readData) => {
+    const entries = req.body;
+
+    CRUD.write(req, res, dataPath, readData, (isWritten) => {
+      if (isWritten)
+        res.send({ error: false, message: "Deleted Successfully" });
     });
   });
 });
