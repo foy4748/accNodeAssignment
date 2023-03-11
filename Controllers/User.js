@@ -41,7 +41,6 @@ router.post("/save", NewUserValidator, (req, res) => {
 
 // PATCH - UPDATE A SINGLE USER
 router.patch("/update", UserIdValidator, (req, res) => {
-  console.log(req.body);
   CRUD.read(req, res, dataPath, (readData) => {
     for (let item of readData) {
       if (parseInt(item.id) == parseInt(req.body.id)) {
@@ -60,14 +59,26 @@ router.patch("/update", UserIdValidator, (req, res) => {
 
 // PATCH - MULTIPLE USERS
 router.patch("/bulk-update", (req, res) => {
-  CRUD.read(req, res, dataPath, (readData) => {
-    const entries = req.body;
-
-    CRUD.write(req, res, dataPath, readData, (isWritten) => {
-      if (isWritten)
-        res.send({ error: false, message: "Deleted Successfully" });
+  try {
+    CRUD.read(req, res, dataPath, (readData) => {
+      const entries = req.body;
+      for (let entry of entries) {
+        for (let item of readData) {
+          if (parseInt(item.id) == parseInt(entry.id)) {
+            for (let key in item) {
+              item[key] = entry[key] ? entry[key] : item[key];
+            }
+          }
+        }
+      }
+      CRUD.write(req, res, dataPath, readData, (isWritten) => {
+        if (isWritten)
+          res.send({ error: false, message: "Updated Multiple Entries" });
+      });
     });
-  });
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 // DELETE - A SINGLE USER

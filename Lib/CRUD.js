@@ -24,7 +24,6 @@ CRUD.read = function (req, res, filePath, cb) {
 // WRITE Functionality
 CRUD.write = function (req, res, filePath, updatedData, cb) {
   const stringified = JSON.stringify(updatedData);
-  console.log(stringified);
   fs.writeFile(filePath, stringified, commonOptions, (error) => {
     if (error) {
       console.error(error);
