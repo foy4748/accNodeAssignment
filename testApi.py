@@ -1,6 +1,6 @@
 import requests as rq
 
-baseURL = "http://127.0.0.1:3001/user"
+baseURL = "https://acc-node-assignment-e1pe.onrender.com/user"
 headers = { "Content-Type": "application/json"}
 
 # Testing /user/random route
@@ -62,6 +62,7 @@ updateData = [
 
 res = rq.patch(baseURL + "/bulk-update", headers=headers, json=updateData)
 print(res.text)
+# TESTING DONE -------------------|
 
     
 # Testing /user/delete route
