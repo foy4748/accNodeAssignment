@@ -2,6 +2,7 @@ const express = require("express");
 const CRUD = require("../Lib/CRUD");
 const { NewUserValidator } = require("../Validators/NewUserValidator");
 const UserIdValidator = require("../Validators/UsesrIdValidator");
+const BulkEntryValidator = require("../Validators/BulkEntryValidator");
 
 const router = express.Router();
 const dataPath = `${global.projectRoot}/data.json`;
@@ -42,6 +43,19 @@ router.post("/save", NewUserValidator, (req, res) => {
 // PATCH - UPDATE A SINGLE USER
 router.patch("/update", UserIdValidator, (req, res) => {
   CRUD.read(req, res, dataPath, (readData) => {
+    const isFound = readData.find(
+      (item) => parseInt(item.id) == parseInt(req.body.id)
+    );
+
+    // In case of User with the provided ID
+    // Doesn't exists
+    if (!isFound) {
+      return res.send({
+        error: true,
+        message: `User with ID: ${req.body.id} doesn't exists`,
+      });
+    }
+
     for (let item of readData) {
       if (parseInt(item.id) == parseInt(req.body.id)) {
         for (const prop in req.body) {
@@ -51,21 +65,24 @@ router.patch("/update", UserIdValidator, (req, res) => {
     }
 
     CRUD.write(req, res, dataPath, readData, (isWritten) => {
-      if (isWritten)
+      if (isWritten && isFound)
         res.send({ error: false, message: "Updated Successfully" });
     });
   });
 });
 
 // PATCH - MULTIPLE USERS
-router.patch("/bulk-update", (req, res) => {
+router.patch("/bulk-update", BulkEntryValidator, (req, res) => {
   try {
     CRUD.read(req, res, dataPath, (readData) => {
       const entries = req.body;
+
+      // WARNING - Time Complexity -->  O(n^2)
       for (let entry of entries) {
         for (let item of readData) {
           if (parseInt(item.id) == parseInt(entry.id)) {
             for (let key in item) {
+              //		  Replaces previous field : Otherwise keeps the previous
               item[key] = entry[key] ? entry[key] : item[key];
             }
           }
@@ -73,7 +90,12 @@ router.patch("/bulk-update", (req, res) => {
       }
       CRUD.write(req, res, dataPath, readData, (isWritten) => {
         if (isWritten)
-          res.send({ error: false, message: "Updated Multiple Entries" });
+          res.send({
+            error: false,
+            message: "Updated Multiple Entries",
+            info: "Users corresponding to non-existing ID(s) are not updated",
+            exceptions: req.exceptions,
+          });
       });
     });
   } catch (error) {
@@ -84,12 +106,25 @@ router.patch("/bulk-update", (req, res) => {
 // DELETE - A SINGLE USER
 router.delete("/delete", UserIdValidator, (req, res) => {
   CRUD.read(req, res, dataPath, (readData) => {
+    const isFound = readData.find(
+      (item) => parseInt(item.id) == parseInt(req.body.id)
+    );
+
+    // In case of User with the provided ID
+    // Doesn't exists
+    if (!isFound) {
+      return res.send({
+        error: true,
+        message: `User with ID: ${req.body.id} doesn't exists`,
+      });
+    }
+
     const newData = readData.filter(
       (item) => parseInt(item.id) != parseInt(req.body.id)
     );
 
     CRUD.write(req, res, dataPath, newData, (isWritten) => {
-      if (isWritten)
+      if (isWritten && isFound)
         res.send({ error: false, message: "Deleted Successfully" });
     });
   });

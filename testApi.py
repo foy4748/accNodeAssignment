@@ -3,16 +3,19 @@ import requests as rq
 baseURL = "http://127.0.0.1:3001/user"
 headers = { "Content-Type": "application/json"}
 
+# Testing /user/random route
+# res = rq.get(baseURL + "/random")
+# print(res.text)
+# TESTING DONE -------------------|
+
+
 # Testing /user/all route
 
 # res = rq.get(baseURL + "/all?limit=3")
 # res = rq.get(baseURL + "/all")
 # print(res.text)
+# TESTING DONE -------------------|
 
-
-# Testing /user/random route
-# res = rq.get(baseURL + "/random")
-# print(res.text)
 
 
 # Testing /user/save route
@@ -31,21 +34,24 @@ headers = { "Content-Type": "application/json"}
 
 # res = rq.post(baseURL + "/save", headers=headers, json=data)
 # print(res.text)
+# TESTING DONE -------------------|
 
 # Testing /user/update route
 # updateData = {
-#         "id":"2",
-#         "name":"Faisal"
+#         "id":"7",
+#         "name":"Test Faisal"
 #         }
 
 # res = rq.patch(baseURL + "/update", headers=headers, json=updateData)
 # print(res.text)
+# TESTING DONE -------------------|
 
 # Testing /user/bulk-update route
 updateData = [
         {
             "id":"2",
-            "name":"Faisal"
+            "name":"Faisal",
+            "testing":"yes I'm testing [this field should not be saved]"
             },
         {
             "id":"3",
@@ -60,8 +66,9 @@ print(res.text)
     
 # Testing /user/delete route
 # deleteData = {
-#         "id":"0xxx",
+#         "id":"6",
 #         }
 
 # res = rq.delete(baseURL + "/delete", headers=headers, json=deleteData)
 # print(res.text)
+# TESTING DONE -------------------|
